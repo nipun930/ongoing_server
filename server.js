@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 var index = require('./app/routes/index');
 var cors = require('cors');
+var auth = require('./authorization.middleware');
 
 const dbconfig = require('./app/config/configuration');
 
@@ -11,6 +12,7 @@ const app = express();
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
+// app.use(auth.Authenticate);
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json());

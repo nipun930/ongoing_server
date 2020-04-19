@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 var res123;
 exports.signup = (req, res) => {
-    console.log('asdasd');
     if (req.body) {
         User.countDocuments({ emailId: req.body.email }).then(count => {
             if (count !== 0) {
@@ -34,21 +33,26 @@ exports.signup = (req, res) => {
 }
 
 exports.login = (req, res) => {
-    console.log('in main function');
-    if(req.body){
-        User.find({emailId: req.body.emailId,}).then(data=>{
-            bcrypt.compare(req.body.password, data[0].password, function(err, result) {
-                if(err){
-                    res.send({success: false, message: 'Server Error!'});
-                } else{
-                    if(result){
-                        let authToken = jwt.sign({userName: req.body.emailId}, config.privateKey ,{expiresIn: '24h'});
-                        res.send({success: true, authToken: authToken, data: data});
-                    } else{
-                        res.send({success: false, message: 'Invalid Username or Password'});
+    if (req.body) {
+        User.find({ emailId: req.body.emailId, }, (error, data) => {
+            if (data.length) {
+                bcrypt.compare(req.body.password, data[0].password, function (err, result) {
+                    if (err) {
+                        res.send({ success: false, message: 'Server Error!' });
+                    } else {
+                        if (result) {
+                            let authToken = jwt.sign({ userName: req.body.emailId }, config.privateKey, { expiresIn: '24h' });
+                            sessionObject = {
+                                validFor : 24*60*60*1000,
+                                loginTimeStamp : new Date()
+                            }
+                            res.send({ success: true, authToken: authToken, data: data });
+                        } else {
+                            res.send({ success: false, message: 'Invalid  Password' });
+                        }
                     }
-                }
-            });
+                });
+            } else { res.send({ success: false, message: 'Invalid Username or Password' }); }
         });
     }
 }
