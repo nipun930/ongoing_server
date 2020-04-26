@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 
 mongoose.connect(dbconfig.url,{useUnifiedTopology: true, useNewUrlParser: true}).then(()=>{
     console.log('connected to mongodb');
-    app.listen( port,'http://13.59.181.119/', () => {
+    app.listen( port,'13.59.181.119', () => {
         index(app);
         app.get('/test', (req, res)=>{
             res.json("server is working now");
