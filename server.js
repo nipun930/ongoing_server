@@ -9,7 +9,7 @@ const dbconfig = require('./app/config/configuration');
 
 const app = express();
 const ngrok = require('ngrok');
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
