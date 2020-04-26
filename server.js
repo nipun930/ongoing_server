@@ -8,6 +8,8 @@ var auth = require('./authorization.middleware');
 const dbconfig = require('./app/config/configuration');
 
 const app = express();
+const ngrok = require('ngrok');
+const port = 3000;
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -19,9 +21,12 @@ app.use(bodyParser.json());
 
 mongoose.connect(dbconfig.url,{useUnifiedTopology: true, useNewUrlParser: true}).then(()=>{
     console.log('connected to mongodb');
-    app.listen(3000, () => {
+    app.listen( port, () => {
         index(app);
         console.log("Server is listening on http://localhost:3000");
+        ngrok.connect(port, function (err, url) {
+            console.log(`Node.js local server is publicly-accessible at ${url}`);
+        });
     });
 }).catch(err => {
     console.log('err while connecting ',err)
