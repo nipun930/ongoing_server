@@ -23,6 +23,9 @@ mongoose.connect(dbconfig.url,{useUnifiedTopology: true, useNewUrlParser: true})
     console.log('connected to mongodb');
     app.listen( port, () => {
         index(app);
+        app.get('/test', (req, res)=>{
+            res.json("server is working now");
+        });
         console.log("Server is listening on http://localhost:3000");
         ngrok.connect(port, function (err, url) {
             if(err){
