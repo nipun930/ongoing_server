@@ -25,7 +25,11 @@ mongoose.connect(dbconfig.url,{useUnifiedTopology: true, useNewUrlParser: true})
         index(app);
         console.log("Server is listening on http://localhost:3000");
         ngrok.connect(port, function (err, url) {
-            console.log(`Node.js local server is publicly-accessible at ${url}`);
+            if(err){
+                console.log(`issue of ngrok`, err);
+            } else{
+                console.log(`Node.js local server is publicly-accessible at ${url}`);
+            }
         });
     });
 }).catch(err => {
