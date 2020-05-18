@@ -2,7 +2,7 @@ const User = require('../models/user.model');
 const config = require('../config/configuration');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-var res123;
+
 exports.signup = (req, res) => {
     if (req.body) {
         User.countDocuments({ emailId: req.body.email }).then(count => {
@@ -33,6 +33,7 @@ exports.signup = (req, res) => {
 }
 
 exports.login = (req, res) => {
+    console.log('upload cntroller is called ',req.connection.remoteAddress);
     if (req.body) {
         User.find({ emailId: req.body.emailId, }, (error, data) => {
             if (data.length) {

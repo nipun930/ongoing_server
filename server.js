@@ -11,20 +11,17 @@ const app = express();
 const ngrok = require('ngrok');
 const port = process.env.PORT || 3000;
 
-// parse requests of content-type - application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true  }));
+app.use(bodyParser.json({limit: "50mb"}));
 app.use(cors());
-// app.use(auth.Authenticate);
 
-// parse requests of content-type - application/json
-app.use(bodyParser.json());
 
 mongoose.connect(dbconfig.url,{useUnifiedTopology: true, useNewUrlParser: true}).then(()=>{
     console.log('connected to mongodb');
     app.listen( port, () => {
         index(app);
-        app.get('/test', (req, res)=>{
-            res.json("server is working now");
+        app.get('/', (req, res)=>{
+            res.json({message : "server is working now"});
         });
         console.log("Server is listening on http://localhost:3000");
         ngrok.connect(port, function (err, url) {
