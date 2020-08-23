@@ -1,6 +1,7 @@
 # ongoing_server
 
 # this is backend developed using node.js + express.js + mongoose 
+# just for login and signup
 
 # just for trial
 
