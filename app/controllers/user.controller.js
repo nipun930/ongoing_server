@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 exports.signup = (req, res) => {
+    console.log('req.body', req.body)
     if (req.body) {
         User.countDocuments({ emailId: req.body.email }).then(count => {
             if (count !== 0) {
@@ -33,7 +34,6 @@ exports.signup = (req, res) => {
 }
 
 exports.login = (req, res) => {
-    console.log('upload cntroller is called ',req.connection.remoteAddress);
     if (req.body) {
         User.find({ emailId: req.body.emailId, }, (error, data) => {
             if (data.length) {
