@@ -1,5 +1,6 @@
 var multer = require('multer');
 var upload = multer({dest:'uploads/'});
+var mime = require('mime-types');
 // require('../uploads/')
 
 // var storage = multer.diskStorage({
@@ -13,25 +14,22 @@ var upload = multer({dest:'uploads/'});
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
+
+      console.log('file => ',file)
       cb(null, './uploads')
     },
     filename: function (req, file, cb) {
-      console.log('file is  => ',file);
-        
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-      cb(null, file.fieldname + '-' + uniqueSuffix)
+      let ext = mime.extension(file.mimetype);
+      cb(null, file.originalname.replace('.'+ext, '_' + uniqueSuffix + '.' + ext));
+      // cb(null, file.fieldname + '-' + uniqueSuffix + '.' + ext)
     }
   })
 
 var upload = multer({ storage: storage }).single('profileImg')
 
 exports.uploadFile = (req, res) => {
-    // console.log('upload cntroller is called ', req);
-    upload(req, res ,(err) => {
-        if(!err){
-            console.log('file uploaded');
-            
-        }
-    });
-    res.send({ data: 'data uploaded ' });
+    // upload(req, res ,(err) => {
+    //     (err)?res.send({ data: 'data not uploaded ', success: false }):res.send({ data: 'data uploaded ' });
+    // });
 }

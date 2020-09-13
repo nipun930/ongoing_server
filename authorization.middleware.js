@@ -4,10 +4,6 @@ const config = require('./app/config/configuration');
 exports.Authenticate = (req, res, next) => {
     
     jwt.verify(req.headers.authorization, config.privateKey, (err, decoded) => {
-        if (decoded) {
-            next();
-        } else {
-            res.send({ success: false, message: 'Authentication failed !' });
-        }
+        (decoded) ? next() : res.send({ success: false, message: 'Authentication failed !' });
     })
 }
