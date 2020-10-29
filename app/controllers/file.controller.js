@@ -71,6 +71,8 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage }).single('profileImg')
 
+}
+
 exports.uploadFile = (req, res) => {
     // upload(req, res ,(err) => {
     //     (err)?res.send({ data: 'data not uploaded ', success: false }):res.send({ data: 'data uploaded ' });
