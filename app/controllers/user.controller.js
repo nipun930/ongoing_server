@@ -33,7 +33,6 @@ exports.signup = (req, res) => {
 }
 
 exports.login = (req, res) => {
-    console.log('upload cntroller is called ',req.connection.remoteAddress);
     if (req.body) {
         User.find({ emailId: req.body.emailId, }, (error, data) => {
             if (data.length) {

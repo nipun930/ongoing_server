@@ -1,37 +1,45 @@
 var multer = require('multer');
-var upload = multer({dest:'uploads/'});
-// require('../uploads/')
-
-// var storage = multer.diskStorage({
-//     destination: function (req, file, cb) {
-//         cb(null, '../uploads/')
-//     },
-//     filename: function (req, file, cb) {
-//         cb(null, file.fieldname + '-' + Date.now()+'.png')
-//     }
-// });
+const mime = require('mime');
+const fs = require('fs');
+// const fssd = require('../uploads/');
 
 var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, './uploads')
-    },
-    filename: function (req, file, cb) {
-      console.log('file is  => ',file);
-        
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-      cb(null, file.fieldname + '-' + uniqueSuffix)
-    }
-  })
-
-var upload = multer({ storage: storage }).single('profileImg')
+    destination: function(req, file, cb) { 
+        cb(null, 'uploads/');    
+     }, 
+     filename: function (req, file, cb) { 
+        cb(null , file.name);   
+     }
+});
+var upload = multer({storage: storage}).single('file');
 
 exports.uploadFile = (req, res) => {
-    // console.log('upload cntroller is called ', req);
-    upload(req, res ,(err) => {
-        if(!err){
-            console.log('file uploaded');
-            
-        }
-    });
+
+    //**************    / IF file is directoly attached in a key 'file' **************
+    
+
+    // upload(req, res, (err)=>{
+    //     if(err){
+    //         res.send({status:false, error: err} );
+    //     }
+    // });
+    
+
+    //**************    / IF file is attached as base 64 url encoded in a key 'file' **************
+
+    // var matches = req.body.encodedFile.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+    var matches = req.body.encodedFile.match(/^data:(.+);base64,(.+)$/);
+    if (matches.length !== 3) {
+        return new Error('Invalid input string');
+    }
+    let file = {};
+    file.type = matches[1];
+    file.data = new Buffer.from(matches[2], 'base64');
+    let fileType = file.type;
+    // let extension = mime.getExtension(fileType);
+    let fileName = req.body.filename;
+    // let fileName = "image." + extension;
+    fs.writeFileSync("uploads/" +new Date().valueOf() +fileName, file.data, 'utf8');
+
     res.send({ data: 'data uploaded ' });
 }
