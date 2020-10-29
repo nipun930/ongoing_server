@@ -11,4 +11,7 @@ exports.Authenticate = (req, res, next) => {
     //     }
     // })
     next();
+    jwt.verify(req.headers.authorization, config.privateKey, (err, decoded) => {
+        (decoded) ? next() : res.send({ success: false, message: 'Authentication failed !' });
+    })
 }

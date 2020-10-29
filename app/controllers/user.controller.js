@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 exports.signup = (req, res) => {
+    console.log('req.body', req.body)
     if (req.body) {
         User.countDocuments({ emailId: req.body.email }).then(count => {
             if (count !== 0) {
